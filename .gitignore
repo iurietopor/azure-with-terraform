@@ -1,0 +1,11 @@
+# .gitignore
+# comment
+
+# files
+.*file.sh
+
+# tf* files
+.terraform/*
+.terraform*
+terraform.tfstate*
+main*.tfplan
