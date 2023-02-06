@@ -1,11 +1,13 @@
 # .gitignore
 # comment
 
-# files
+# ssh key files
 .*file.sh
+.*ssh
 
 # tf* files
 .terraform/*
 .terraform*
 terraform.tfstate*
 main*.tfplan
+main*.plan
