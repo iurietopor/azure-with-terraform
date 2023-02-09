@@ -1,6 +1,9 @@
 # .gitignore
 # comment
 
+# sh scripts examples/test
+*.sh-*
+
 # ssh key files
 .*file.sh
 .*ssh
