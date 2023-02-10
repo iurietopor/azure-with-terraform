@@ -5,8 +5,11 @@
 *.sh-*
 
 # ssh key files
-.*file.sh
-.*ssh
+*.*file.sh
+*.*ssh*
+
+# vscode
+*/.vscode/*
 
 # tf* files
 .terraform/*
