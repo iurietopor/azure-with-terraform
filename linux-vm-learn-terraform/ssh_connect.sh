@@ -26,18 +26,17 @@ MAIN()
 
 	if [ -n "${*}" ]; then
 		SET_OPTIONS "$@"
-		LOG "${FUNCNAME[0]}" "For script $0 was provided options: ${*}"
 		CHECK_USERNAME 
 		CHECK_VM_IP
 		CHECK_SSH_KEY
-		LOG "${FUNCNAME[0]}" "Following paramiters will be used:"
-		LOG "${FUNCNAME[0]}" "username: $vm_user" 
-		LOG "${FUNCNAME[0]}" "ip_address: $vm_IP"
-		LOG "${FUNCNAME[0]}" "ssh_key_file: $vm_ssh_key"
+		LOG "verbose" "${FUNCNAME[0]}" "Following parameters will be used:"
+		# LOG "verbose" "${FUNCNAME[0]}" "username: $vm_user" 
+		# LOG "verbose" "${FUNCNAME[0]}" "ip_address: $vm_IP"
+		LOG "verbose" "${FUNCNAME[0]}" "ssh_key_file: $vm_ssh_key"
 		to_do="$ssh_connect"
 		if [ "$to_do" ]; then
-			echo "SSH connect"
-			# eval ssh -i $ss_key $vm_user@$vm_IP
+			LOG "Connect to $vm_IP with $vm_user via SSH"
+			eval "ssh -i $vm_ssh_key $vm_user@$vm_IP"
 		fi
 	else
 		HELP "--less" "Don't know what to do. No OPTION was passed"
@@ -50,6 +49,7 @@ MAIN()
 
 SET_OPTIONS() 
 {
+	LOG "verbose" "${FUNCNAME[0]}" "For script $0 was provided options: ${*}"
 	while [ "$#" -gt 0 ]; do
 		case "$1" in
 			"-c" | "--connect")
@@ -103,7 +103,10 @@ HELP()
 		echo "$0 HELP statement"
 		echo
 		echo "DESCRIPTION:"
-		echo "    __will be implemented__"
+		echo "    Connect automaticaly to VM after 'terraform apply' command. This"
+		echo "     script check automaticaly if exist 'terraform outputs' for IP "
+		echo "     and SSH_KEY after that, validate them. Default user for "
+		echo "     SSH_Connection is 'azureuser'."
 		echo
 		echo
 		echo "USAGE: $0 [OPTIONS].."
@@ -148,7 +151,7 @@ EXIT()
 CHECK_USERNAME() 
 {
 	local user="$username"
-	if [ -z "${vm_user}" ]; then
+	if [ -z "$user" ]; then
 		user='azureuser'
 	fi
 	vm_user="$user"
@@ -209,7 +212,7 @@ CHECK_SSH_KEY ()
 		grep -qE "(^4096\s+SHA256.*\(RSA\)$)"; \
 		echo $?)" )
 
-	LOG "verbose" "${FUNCNAME[0]}:" "Result of 1th validation step: ${valid[*]}"
+	LOG "verbose" "${FUNCNAME[0]}:" "Results of validation steps: ${valid[*]}"
 	
 	if [[ "${valid[0]}" = 2 ]] && [[ "${valid[1]}" = 62 ]] && [ "${valid[2]}" ]; then
 		eval 'echo "$ssh_key_content" > "$k_file"'
