@@ -15,4 +15,14 @@ This 'Quickstart' include:
 - Create a virtual machine
 - Use ssh to connect to virtual machine
 
+## `ssh_connect.sh`
+
+This is a script which automaticaly connect to your VM after `terraform apply`.
+This script validate automaticaly the ssh_key, and ip_address from `terraform output ...` commands.
+
+For more details see:
+```bash
+./ssh_connect.sh -h
+```
+
 ---
